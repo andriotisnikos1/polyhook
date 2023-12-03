@@ -9,10 +9,12 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import tailwind from "~/styles/tailwind.css";
+import vercelToast from "vercel-toast/dist/vercel-toast.css";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   { rel: "stylesheet", href: tailwind },
+  { rel: "stylesheet", href: vercelToast },
 ];
 
 export default function App() {

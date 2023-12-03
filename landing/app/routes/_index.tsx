@@ -1,6 +1,13 @@
 import { Link1Icon } from "@radix-ui/react-icons";
-import type { ActionFunction, MetaFunction } from "@remix-run/cloudflare";
-import { Form } from "@remix-run/react";
+import type {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/cloudflare";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
+import { createToast } from "vercel-toast";
+import { Headbar } from "~/components/Headbar";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,22 +29,17 @@ export const action: ActionFunction = async ({ request }) => {
       email,
     }),
   });
-  return null;
+  return true;
 };
 
-function Headbar() {
-  return (
-    <div className="flex w-4/5 items-center justify-between border-b px-2 py-3">
-      <div className="flex items-center space-x-2">
-        <Link1Icon height="20" width="20" />
-        <h1 className="font-bold">Polyhook</h1>
-      </div>
-      <button className="rounded-full bg-black px-3 py-1 text-sm text-white">
-        Join Waitlist
-      </button>
-    </div>
-  );
-}
+export const loader: LoaderFunction = async ({ request }) => {
+  const urlSearchParams = new URLSearchParams(request.url.split("?")[1]);
+  const fromHeadbar = urlSearchParams.get("fromHeadbar");
+  console.log(fromHeadbar);
+  if (fromHeadbar === "true") return true;
+
+  return false;
+};
 
 function Hero() {
   return (
@@ -55,7 +57,7 @@ function Hero() {
 function Waitlist() {
   return (
     <Form
-      className="mt-10 flex items-center space-x-1 rounded-xl border p-1 mb-10"
+      className="mt-5 flex items-center space-x-1 rounded-xl border p-1 mb-10"
       method="post"
     >
       <input
@@ -135,6 +137,22 @@ function NoCode() {
 }
 
 export default function Index() {
+  const actionData = useActionData<boolean>();
+  const loaderData = useLoaderData<boolean>();
+  useEffect(() => {
+    if (actionData) {
+      createToast("You've been added to the waitlist!", {
+        type: "success",
+        timeout: 5000,
+      });
+    }
+    if (loaderData && !actionData) {
+      createToast("You can join the waitlist in this page.", {
+        type: "dark",
+        timeout: 5000,
+      });
+    }
+  }, [actionData, loaderData]);
   return (
     <div className="flex h-full w-full flex-col items-center">
       <Headbar />
@@ -142,6 +160,10 @@ export default function Index() {
         Product Hunt launch coming soon!
       </p>
       <Hero />
+      <p className="mt-5">
+        Polyhook allows you to send emails and trigger multiple webhooks with
+        the push of a button!
+      </p>
       <Waitlist />
       <AutoScale />
       <div className="flex items-center space-x-4 mt-4 justify-center">

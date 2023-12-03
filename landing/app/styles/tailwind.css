@@ -7,3 +7,9 @@ html,
 body {
   height: 100%;
 }
+
+.text-gradient {
+  background: linear-gradient(90deg, #FF00FF 0%, #00FFFF 100%);
+  background-clip: text;
+  color: transparent;
+}
