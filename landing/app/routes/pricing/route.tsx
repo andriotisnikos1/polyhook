@@ -1,5 +1,49 @@
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { MetaFunction } from "@remix-run/cloudflare";
 import { Headbar } from "~/components/Headbar";
+
+export const meta: MetaFunction = () => [
+  { title: "Polyhook | Pricing" },
+  {
+    name: "description",
+    content:
+      "Polyhook's pricing is simple and easy to understand. We have a basic plan and a pro plan that caters to your needs.",
+  },
+  {
+    name: "og:title",
+    content: "Polyhook | Pricing",
+  },
+  {
+    name: "og:description",
+    content:
+      "Polyhook's pricing is simple and easy to understand. We have a basic plan and a pro plan that caters to your needs.",
+  },
+  {
+    name: "og:url",
+    content: "https://polyhook.me/pricing",
+  },
+  {
+    name: "twitter:title",
+    content: "Polyhook | Pricing",
+  },
+  {
+    name: "twitter:description",
+    content:
+      "Polyhook's pricing is simple and easy to understand. We have a basic plan and a pro plan that caters to your needs.",
+  },
+  {
+    name: "og:image",
+    content: "https://polyhook.me/assets/images/social/banner.png",
+  },
+  {
+    name: "twitter:card",
+    content: "summary_large_image",
+  },
+  {
+    name: "twitter:image",
+    content: "https://polyhook.me/assets/images/social/banner.png",
+  },
+];
 
 export default function Pricing() {
   return (

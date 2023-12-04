@@ -11,8 +11,46 @@ import { Headbar } from "~/components/Headbar";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Polyhook | Important notifications, when you need them." },
+    {
+      name: "description",
+      content:
+        "Polyhook allows you to send emails and trigger multiple webhooks with the push of a button!",
+    },
+    {
+      name: "og:title",
+      content: "Polyhook | Important notifications, when you need them.",
+    },
+    {
+      name: "og:description",
+      content:
+        "Polyhook allows you to send emails and trigger multiple webhooks with the push of a button!",
+    },
+    {
+      name: "og:url",
+      content: "https://polyhook.me",
+    },
+    {
+      name: "twitter:title",
+      content: "Polyhook | Important notifications, when you need them.",
+    },
+    {
+      name: "twitter:description",
+      content:
+        "Polyhook allows you to send emails and trigger multiple webhooks with the push of a button!",
+    },
+    {
+      name: "og:image",
+      content: "https://polyhook.me/assets/images/social/banner.png",
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
+    },
+    {
+      name: "twitter:image",
+      content: "https://polyhook.me/assets/images/social/banner.png",
+    },
   ];
 };
 
