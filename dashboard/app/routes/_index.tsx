@@ -1,10 +1,19 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import cookies from "~/scripts/cookies";
+import worldapi from "~/scripts/worldapi";
 
 export const meta: MetaFunction = () => {
   return [
     { title: "New Remix App" },
     { name: "description", content: "Welcome to Remix!" },
   ];
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const sessionID = cookies.session.parse(request.headers.get("Cookie") || "");
+  const user = await worldapi.auth().getUser(sessionID);
+  console.log(user);
+  return null;
 };
 
 export default function Index() {

@@ -16,6 +16,8 @@
     "@remix-run/cloudflare-pages": "^2.3.1",
     "@remix-run/css-bundle": "^2.3.1",
     "@remix-run/react": "^2.3.1",
+    "@worldapi/sdk": "^1.0.56",
+    "cookie": "^0.6.0",
     "isbot": "^3.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,6 +30,7 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "eslint": "^8.38.0",
+    "npm-check-updates": "^16.14.12",
     "typescript": "^5.1.0",
     "wrangler": "^3.8.0"
   },

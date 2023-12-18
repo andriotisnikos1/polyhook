@@ -1,4 +1,21 @@
 import { GitHubLogoIcon, Link1Icon } from "@radix-ui/react-icons";
+import { LoaderFunction } from "@remix-run/cloudflare";
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import worldapi from "~/scripts/worldapi";
+
+interface LoaderData {
+  auth: {
+    github: string;
+  };
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  return {
+    auth: {
+      github: worldapi.auth().getAuthURL("github"),
+    },
+  };
+};
 
 export default function Login() {
   return (
@@ -21,6 +38,8 @@ export default function Login() {
 }
 
 function LoginForm() {
+  const loaderData = useLoaderData<LoaderData>();
+  if (!loaderData.auth) loaderData.auth = { github: "" };
   return (
     <div className="w-1/2 h-full flex items-center justify-center">
       <div className="flex flex-col w-1/2 p-5 space-y-5">
@@ -29,12 +48,15 @@ function LoginForm() {
           <p className="text-sm opacity-60">to your Polyhook account</p>
         </div>
         <div className="flex flex-col space-y-2">
-          <p className="font-bold text-sm">Social Media</p>
+          <p className="font-bold text-sm">Thrid Party</p>
           <div className="flex flex-col space-y-3">
-            <button className="flex items-center justify-center space-x-2 border rounded-lg py-1 hover:bg-slate-100">
+            <a
+              href={loaderData.auth.github}
+              className="flex items-center justify-center space-x-2 border rounded-lg py-1 hover:bg-slate-100"
+            >
               <GitHubLogoIcon />
               <p>Sign In with GitHub</p>
-            </button>
+            </a>
           </div>
         </div>
         <div className="flex flex-col space-y-2">

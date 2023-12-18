@@ -21,7 +21,7 @@ export default t.procedure
     .query(async ctx => {
         try {
             const polyhookID = crypto.randomBytes(16).toString("hex")
-            const polyhook = await polyhooks.insertOne({
+            await polyhooks.insertOne({
                 name: ctx.input.name,
                 polyhookID,
                 urls: ctx.input.urls,
