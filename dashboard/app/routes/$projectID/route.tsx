@@ -1,5 +1,4 @@
 import {
-  ArrowRightIcon,
   ChevronRightIcon,
   ExitIcon,
   Link1Icon,

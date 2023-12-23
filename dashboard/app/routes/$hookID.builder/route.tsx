@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, Link1Icon } from "@radix-ui/react-icons";
-import { LoaderFunction, redirect } from "@remix-run/cloudflare";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 
 export default function Route() {

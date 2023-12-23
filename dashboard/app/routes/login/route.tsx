@@ -1,5 +1,5 @@
 import { GitHubLogoIcon, Link1Icon } from "@radix-ui/react-icons";
-import { LoaderFunction } from "@remix-run/cloudflare";
+import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import worldapi from "~/scripts/worldapi";
 

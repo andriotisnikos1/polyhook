@@ -7,7 +7,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   let sessionID = url.searchParams.get("sessionID");
   return redirect("/", {
     headers: {
-      "Set-Cookie": cookies.session.serialize(sessionID || ""),
+      "Set-Cookie": await cookies.session.serialize(sessionID),
     },
   });
 };

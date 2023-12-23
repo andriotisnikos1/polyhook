@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import cookies from "~/scripts/cookies";
 import worldapi from "~/scripts/worldapi";
 
@@ -10,7 +10,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const sessionID = cookies.session.parse(request.headers.get("Cookie") || "");
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
   const user = await worldapi.auth().getUser(sessionID);
   console.log(user);
   return null;
