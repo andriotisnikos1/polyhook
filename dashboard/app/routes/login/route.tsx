@@ -1,6 +1,7 @@
 import { GitHubLogoIcon, Link1Icon } from "@radix-ui/react-icons";
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
+import cookies from "~/scripts/cookies";
 import worldapi from "~/scripts/worldapi";
 
 interface LoaderData {
@@ -10,6 +11,8 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  if (sessionID) return redirect("/");
   return {
     auth: {
       github: worldapi.auth().getAuthURL("github"),

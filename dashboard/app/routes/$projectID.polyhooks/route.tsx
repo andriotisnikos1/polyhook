@@ -28,7 +28,7 @@ export default function Route() {
 function Hook() {
   return (
     <Link
-      to="/lmao/builder"
+      to="/lmao/builder/summary"
       className="border rounded-lg shadow-md flex flex-col space-y-5 min-w-[200px] p-4"
     >
       <p className="text-sm font-bold">Hello World Polyhook</p>
