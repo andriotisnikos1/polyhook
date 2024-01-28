@@ -25,9 +25,10 @@ export default function Route() {
         <Link to={`summary`} className="px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
           Summary
         </Link>
-        <button className="px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
-          Edit
-        </button>
+        <Link to={'edit'} className="flex items-center space-x-2 px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
+          <p>Edit</p>
+          <button className="px-3 py-1 bg-black rounded-lg text-white">Save</button>
+        </Link>
         <button className="px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
           Settings
         </button>
