@@ -67,7 +67,7 @@ function Metric({
         <Icon className="w-4 h-4" />
         <p className="text-sm font-bold">{title}</p>
       </div>
-      <p className="text-2xl font-extrabold">{value}</p>
+      <p className="text-2xl font-bold">{value}</p>
     </div>
   );
 }
