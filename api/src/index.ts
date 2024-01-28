@@ -16,7 +16,7 @@ export type AppRouter = typeof trpc_root;
 export const trpc = createTRPCProxyClient<AppRouter>({
     links: [
         httpBatchLink({
-            url: "http://localhost:3000/trpc"
+            url: "http://localhost:3002/trpc"
         })
     ]
 })
@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/rest", root)
 app.use("/trpc", createExpressMiddleware({ router: trpc_root, createContext: createContext }))
 
-const port = process.env.NODE_ENV === 'production' ? process.env.PORT! : 3000;
+const port = process.env.NODE_ENV === 'production' ? process.env.PORT! : 3002;
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

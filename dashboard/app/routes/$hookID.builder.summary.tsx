@@ -24,17 +24,32 @@ export default function Summary() {
           <MixerHorizontalIcon className="w-4 h-4" />
           <p className="text-sm font-bold">Actions</p>
         </div>
-        <div className="grid grid-cols-4 grid-flow-row w-[max-content] max-w-full gap-4 p-4 border rounded-xl">
-          <div className="flex items-center p-2 rounded-lg border space-x-2">
-            <Link2Icon className="!w-5 !h-5" />
-            <p className="text-sm font-bold truncate">
-              https://my.webhook.example/hello_world
-            </p>
-          </div>
-        </div>
+       <div className="grid grid-cols-4 gap-2 grid-flow-row w-[max-content]">
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+          <Action />
+       </div>
       </div>
     </div>
   );
+}
+
+function Action() {
+  return (
+    <div className="flex items-center space-x-2 px-4 py-3 max-w-[330px] rounded-lg hover:bg-slate-100">
+          <Link2Icon className="w-4 h-4" />
+          <p className="text-sm font-bold truncate">https://my.webhook.example/hello_world</p>
+        </div>
+  )
 }
 
 function Metric({
@@ -52,7 +67,7 @@ function Metric({
         <Icon className="w-4 h-4" />
         <p className="text-sm font-bold">{title}</p>
       </div>
-      <p className="text-2xl font-extrabold">{value}</p>
+      <p className="text-2xl font-bold">{value}</p>
     </div>
   );
 }
