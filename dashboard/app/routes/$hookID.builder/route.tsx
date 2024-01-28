@@ -2,7 +2,7 @@ import { ArrowLeftIcon, Link1Icon } from "@radix-ui/react-icons";
 import { LoaderFunction, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 
-export const loader:LoaderFunction = async ({ params }) => ({hookID: params.hookID})
+export const loader: LoaderFunction = async ({ params }) => ({ hookID: params.hookID })
 
 export default function Route() {
   const loaderData = useLoaderData<{ hookID: string }>();
@@ -25,13 +25,12 @@ export default function Route() {
         <Link to={`summary`} className="px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
           Summary
         </Link>
-        <Link to={'edit'} className="flex items-center space-x-2 px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
+        <Link to={'edit'} className="px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
           <p>Edit</p>
-          <button className="px-3 py-1 bg-black rounded-lg text-white">Save</button>
         </Link>
-        <button className="px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
+        <Link to={'settings'} className="px-3 py-2 text-sm hover:bg-slate-100 data-[active=true]:bg-slate-100 rounded-lg">
           Settings
-        </button>
+        </Link>
       </div>
       <Outlet />
     </div>
