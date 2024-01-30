@@ -1,5 +1,6 @@
 import { redirect, type LoaderFunction, type MetaFunction } from "@remix-run/node";
 import cookies from "~/scripts/cookies";
+import trpc from "~/scripts/trpc";
 import worldapi from "~/scripts/worldapi";
 
 export const meta: MetaFunction = () => {
@@ -11,13 +12,16 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
-  if (!sessionID) return redirect("/login");
+  if (!sessionID) return redirect("/login?from_root=true");
   const user = await worldapi.auth().getUser(sessionID);
-  return user ? redirect("/projects", {
+  if (!user) return redirect("/login?from_root=true");
+  const validation = await trpc.auth.finalize.query({ sessionID });
+  if (!validation) return redirect("/login?from_root=true");
+  return redirect("/dashboard", {
     headers: {
-      "Set-Cookie": await cookies.user.serialize(user),
+      "Set-Cookie": await cookies.session.serialize(sessionID)
     },
-  }) : redirect("/login");
+  });
 };
 
 export default function Index() {

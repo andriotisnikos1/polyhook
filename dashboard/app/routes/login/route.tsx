@@ -11,13 +11,16 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
-  if (sessionID) return redirect("/");
-  return {
+  const links = {
     auth: {
       github: worldapi.auth().getAuthURL("github"),
     },
   };
+  const from_root = request.url.includes("from_root=true");
+  if (from_root) return links
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  if (sessionID) return redirect("/");
+  return links
 };
 
 export default function Login() {
