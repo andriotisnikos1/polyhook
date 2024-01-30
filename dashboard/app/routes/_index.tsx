@@ -15,11 +15,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!sessionID) return redirect("/login?from_root=true");
   const user = await worldapi.auth().getUser(sessionID);
   if (!user) return redirect("/login?from_root=true");
-  const validation = await trpc.auth.finalize.query({ sessionID });
-  if (!validation) return redirect("/login?from_root=true");
-  return redirect("/dashboard", {
+  const final = await trpc.auth.finalize.query({ sessionID });
+  if (!final) return redirect("/login?from_root=true");
+  return redirect("/projects", {
     headers: {
-      "Set-Cookie": await cookies.session.serialize(sessionID)
+      "Set-Cookie": await cookies.projects.serialize(final.projects),
+      "set-cookie": await cookies.user.serialize(JSON.stringify(user)),
     },
   });
 };
