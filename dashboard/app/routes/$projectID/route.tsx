@@ -6,11 +6,29 @@ import {
   PlusIcon,
   ReaderIcon,
 } from "@radix-ui/react-icons";
-import { Link, Outlet, useParams } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import dropdownCSS from "~/styles/radix-ui/dropdown.css";
+import { LoaderFunction, redirect } from "@remix-run/node";
+import cookies from "~/scripts/cookies";
+import { User } from "node_modules/@worldapi/sdk/types/User";
+import { Project } from "~/types/project";
 
 export const links = () => [{ rel: "stylesheet", href: dropdownCSS }];
+
+export const loader:LoaderFunction = async ({ request }) => {
+  const projects = await cookies.projects.parse(request.headers.get("Cookie"));
+  // if (!projects) return redirect("/login");
+  return {
+    projects: [
+      {
+        polyhooks: 5,
+        name: "hello",
+        projectID: "hello",
+      },
+    ],
+  }
+}
 
 export default () => {
   return (
@@ -75,6 +93,10 @@ function Sidebar() {
 
 
 function ProjectDropdown() {
+  const loaderData = useLoaderData<{ projects: Project.Project[] }>();
+  console.log(loaderData);
+  if (!loaderData.projects) return null;
+  const ProjectDisplay = (p: Project.Project) => <Link to={`/${p.projectID}`} className="px-4 py-2 hover:bg-slate-100 rounded-[6px]">{p.name}</Link>
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -87,7 +109,9 @@ function ProjectDropdown() {
       <DropdownMenu.Portal>
         <DropdownMenu.Content className="DropdownMenuContent" sideOffset={5}>
           <div className="w-full h-full border rounded-[14px] flex flex-col space-y-2 p-2 ">
-            <Link to={'/project1'} className="px-4 py-2 hover:bg-slate-100 rounded-[6px]">Project 1</Link>
+            {loaderData.projects.map((project) => (
+              <ProjectDisplay key={project.projectID} {...project} />
+            ))}
             <Link to={'/project1'} className="px-4 py-2 hover:bg-slate-100 rounded-[6px] flex items-center space-x-2">
               <PlusIcon className="text-gray-400" />
               <p>Create new project</p>

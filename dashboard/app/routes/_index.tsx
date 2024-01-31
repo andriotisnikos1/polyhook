@@ -12,10 +12,13 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  console.log(sessionID);
   if (!sessionID) return redirect("/login?from_root=true");
   const user = await worldapi.auth().getUser(sessionID);
+  console.log(user);
   if (!user) return redirect("/login?from_root=true");
   const final = await trpc.auth.finalize.query({ sessionID });
+  console.log(final);
   if (!final) return redirect("/login?from_root=true");
   return redirect("/projects", {
     headers: {

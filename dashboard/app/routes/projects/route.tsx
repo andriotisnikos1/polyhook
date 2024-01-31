@@ -2,12 +2,7 @@ import { LoaderFunction, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { User } from "node_modules/@worldapi/sdk/types/User";
 import cookies from "~/scripts/cookies";
-
-interface Project {
-  name: string;
-  polyhooks: number;
-  projectID: string;
-}
+import { Project as ProjectT } from "~/types/project";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
@@ -28,7 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export default () => {
-  const loaderData = useLoaderData<{ user: User, projects: Project[] }>();
+  const loaderData = useLoaderData<{ user: User, projects: ProjectT.Project[] }>();
   if (!loaderData.user || !loaderData.projects) return null
   const { user } = loaderData
   return (
@@ -49,7 +44,7 @@ export default () => {
 };
 
 
-function Project({ project }: { project: Project }) {
+function Project({ project }: { project: ProjectT.Project }) {
   return (
     <div className="flex items-center justify-between p-5 bg-slate-50 hover:bg-slate-100 rounded-md">
           <p className="font-semibold text-lg">{project.name}</p>
