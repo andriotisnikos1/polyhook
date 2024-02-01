@@ -1,6 +1,6 @@
 import { GitHubLogoIcon, Link1Icon } from "@radix-ui/react-icons";
 import { LoaderFunction, redirect } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import cookies from "~/scripts/cookies";
 import worldapi from "~/scripts/worldapi";
 

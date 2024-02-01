@@ -6,6 +6,7 @@ import {
   MixerHorizontalIcon,
 } from "@radix-ui/react-icons";
 
+
 export default function Summary() {
   return (
     <div className="w-full p-12 flex flex-col space-y-12">

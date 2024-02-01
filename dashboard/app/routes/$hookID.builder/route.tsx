@@ -1,18 +1,24 @@
 import { ArrowLeftIcon, Link1Icon } from "@radix-ui/react-icons";
-import { LoaderFunction, redirect } from "@remix-run/node";
+import { LoaderFunction, json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import cookies from "~/scripts/cookies";
 
-export const loader: LoaderFunction = async ({ params }) => ({ hookID: params.hookID })
-
+export const loader: LoaderFunction = async ({request}) => {
+  const sp = new URLSearchParams(request.url)
+  let projectID = sp.get("projectID")
+  if (!projectID) projectID = await cookies.projectID.parse(request.headers.get("Cookie"))
+  if (!projectID) return redirect("/projects")
+  return json({projectID}, {headers: {"Set-Cookie": await cookies.projectID.serialize(projectID)}})
+}
 export default function Route() {
-  const loaderData = useLoaderData<{ hookID: string }>();
+  const loaderData = useLoaderData<{projectID: string}>()
   return (
     <div className="w-full h-full flex flex-col">
       <div className="w-full flex p-3">
-        <button className="px-3 py-1 bg-black text-white flex items-center space-x-2 rounded-md">
+        <a href={`/${loaderData.projectID}`} className="px-3 py-1 bg-black text-white flex items-center space-x-2 rounded-md">
           <ArrowLeftIcon className="w-4 h-4" />
           <span className="text-sm">Dashboard</span>
-        </button>
+        </a>
       </div>
       <div className="flex items-center space-x-4 p-8">
         <Link1Icon className="w-8 h-8" />

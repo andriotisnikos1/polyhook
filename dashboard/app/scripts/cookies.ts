@@ -18,8 +18,15 @@ const projectsCookie = createCookie("projects", {
     maxAge: 60 * 60
 })
 
+const projectIDCookie = createCookie("projectID", {
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 60 * 60
+})
+
 export default {
     session: sessionCookie,
     user: userCookie,
-    projects: projectsCookie
+    projects: projectsCookie,
+    projectID: projectIDCookie
 }
