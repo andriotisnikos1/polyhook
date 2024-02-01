@@ -13,7 +13,6 @@
   "type": "module",
   "dependencies": {
     "@dopplerhq/node-sdk": "^1.2.0",
-    "@googleapis/oauth2": "^1.0.5",
     "@trpc/client": "^10.45.0",
     "@trpc/server": "^10.45.0",
     "@worldapi/sdk": "^1.0.56",
