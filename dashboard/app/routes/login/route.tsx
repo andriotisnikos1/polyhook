@@ -54,7 +54,7 @@ function LoginForm() {
           <p className="text-sm opacity-60">to your Polyhook account</p>
         </div>
         <div className="flex flex-col space-y-2">
-          <p className="font-bold text-sm">Thrid Party</p>
+          <p className="font-bold text-sm">Third Party</p>
           <div className="flex flex-col space-y-3">
             <a
               href={loaderData.auth.github}

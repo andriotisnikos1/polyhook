@@ -18,7 +18,7 @@ export const links = () => [{ rel: "stylesheet", href: dropdownCSS }];
 
 export const loader:LoaderFunction = async ({ request }) => {
   const projects = await cookies.projects.parse(request.headers.get("Cookie"));
-  // if (!projects) return redirect("/login");
+  if (!projects) return redirect("/login");
   return {
     projects: [
       {
@@ -94,7 +94,6 @@ function Sidebar() {
 
 function ProjectDropdown() {
   const loaderData = useLoaderData<{ projects: Project.Project[] }>();
-  console.log(loaderData);
   if (!loaderData.projects) return null;
   const ProjectDisplay = (p: Project.Project) => <Link to={`/${p.projectID}`} className="px-4 py-2 hover:bg-slate-100 rounded-[6px]">{p.name}</Link>
   return (

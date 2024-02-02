@@ -4,12 +4,14 @@ import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import cookies from "~/scripts/cookies";
 
 export const loader: LoaderFunction = async ({request}) => {
-  const sp = new URLSearchParams(request.url)
+  const sp = new URLSearchParams(request.url.split("?")[1] || "")
   let projectID = sp.get("projectID")
-  if (!projectID) projectID = await cookies.projectID.parse(request.headers.get("Cookie"))
+  if (!projectID) projectID = await cookies.projectID.parse(request.headers.get("Cookie") || "")
   if (!projectID) return redirect("/projects")
   return json({projectID}, {headers: {"Set-Cookie": await cookies.projectID.serialize(projectID)}})
 }
+
+
 export default function Route() {
   const loaderData = useLoaderData<{projectID: string}>()
   return (
