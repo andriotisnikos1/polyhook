@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
 import React from "react";
 import dialogCSS from "~/styles/radix-ui/dialog.css";
 
@@ -14,6 +14,11 @@ interface Polyhook {
     runs: number
     successful: number
   }
+}
+
+export const action = () => {
+  console.log("action");
+  return null;
 }
 
 export const loader = () => ({
@@ -63,7 +68,6 @@ function Hook({ polyhook }: { polyhook: Polyhook }) {
 }
 
 function NewPolyhookDialog() {
-  const [urls, setUrls] = React.useState<string[]>([])
   const closeref = React.useRef<HTMLButtonElement>(null)
   return (
     <Dialog.Root>
@@ -73,11 +77,11 @@ function NewPolyhookDialog() {
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent !w-[600px]">
-          <div className="flex flex-col space-y-8">
+          <Form method="post" className="flex flex-col space-y-8">
             <h1 className="font-semibold text-xl">New Polyhook</h1>
             <div className="flex flex-col space-y-1 items-start justify-center">
               <span className="text-xs font-bold">Name</span>
-              <div className="border rounded-lg w-full"><input type="text" name="" className="px-3 py-1 text-sm w-[90%]" /></div>
+              <div className="border rounded-lg w-full"><input type="text" name="polyhook_name" className="px-3 py-1 text-sm w-[90%]" /></div>
             </div>
             <div className="flex flex-col space-y-1 items-start justify-center w-full">
               <span className="text-xs font-bold">URLs (one under the other)</span>
@@ -86,15 +90,14 @@ function NewPolyhookDialog() {
               </div>
             </div>
             <div className="flex items-center justify-start space-x-4">
-              <button className="text-white bg-black px-3 py-1 rounded-md">Create</button>
+              <button type="submit" className="text-white bg-black px-3 py-1 rounded-md">Create</button>
               
                 <button className="px-3 py-1 rounded-md" onClick={() => {
-                  setUrls([])
                   closeref.current?.click()
                 }}>Cancel</button>
                 <Dialog.Close ref={closeref}/>
             </div>
-          </div>
+          </Form>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
