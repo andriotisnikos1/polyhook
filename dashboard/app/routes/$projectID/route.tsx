@@ -10,31 +10,32 @@ import { Form, Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Dialog from "@radix-ui/react-dialog";
 import dropdownCSS from "~/styles/radix-ui/dropdown.css";
-import { LoaderFunction, redirect } from "@remix-run/node";
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import cookies from "~/scripts/cookies";
 import dialogCSS from "~/styles/radix-ui/dialog.css";
-import { Project } from "~/types/project";
-import React from "react";
+import React, { useEffect } from "react";
+import trpc from "~/scripts/trpc";
+import { polyhook } from "~/types/project";
 
 export const links = () => [{ rel: "stylesheet", href: dropdownCSS }, { rel: "stylesheet", href: dialogCSS }];
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const projects = await cookies.projects.parse(request.headers.get("Cookie"));
-  if (!projects) return redirect("/login");
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  if (!sessionID) return redirect("/login");
+  const projects = await trpc.projects.list.query({ sessionID });
   return {
-    projects: [
-      {
-        polyhooks: 5,
-        name: "hello",
-        projectID: "hello",
-      },
-    ],
+    projects: projects ?? [],
   }
 }
 
-export const action = () => {
-  console.log("action");
-  return null;
+export const action:ActionFunction = async({request}) => {
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  if (!sessionID) return redirect("/login");
+  const formData = await request.formData();
+  const project_name = formData.get("project_name")! as string;
+  const project = await trpc.projects.create.query({name: project_name, sessionID});
+  if (!project) return redirect("/login");
+  return redirect(`/${project.projectID}`);
 }
 
 export default () => {
@@ -51,6 +52,9 @@ export default () => {
 function Sidebar() {
   const params = useParams();
   const projectID = params.projectID ?? "not found";
+  useEffect(() => {
+    console.log(projectID);
+  }, [projectID]);
 
   return (
     <div className="h-full border-r w-1/5 flex flex-col p-5 justify-between">
@@ -111,11 +115,11 @@ function NewProjectDialog() {
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent !w-[400px]" >
-          <Form method="post" className="flex flex-col space-y-4">
+          <Form method="post" className="flex flex-col space-y-4" >
             <h1>Create new project</h1>
             <div>
               <p className="text-xs font-semibold">Name</p>
-              <div className="w-full border rounded-lg px-3 py-1" ><input type="text" name="project_name" className="w-full text-sm outline-none" /></div>
+              <div className="w-full border rounded-lg px-3 py-1" ><input required autoComplete="off" type="text" name="project_name" className="w-full text-sm outline-none" /></div>
             </div>
             <div className="flex items-center space-x-2">
               <button type="submit" className="text-sm bg-black px-3 py-1 rounded-md text-white w-[max-content]">Submit</button>
@@ -132,11 +136,11 @@ function NewProjectDialog() {
 
 function ProjectDropdown() {
   const projectID = useParams().projectID;
-  const loaderData = useLoaderData<{ projects: Project.Project[] }>();
+  const loaderData = useLoaderData<{ projects: polyhook.Project[] }>();
   if (!loaderData.projects) return null;
   const project = loaderData.projects.find((p) => p.projectID === projectID);
   if (!project) return null;
-  const ProjectDisplay = (p: Project.Project) => <Link to={`/${p.projectID}`} className="px-4 py-2 hover:bg-slate-100 rounded-[6px]">{p.name}</Link>
+  const ProjectDisplay = (p: polyhook.Project) => <Link to={`/${p.projectID}`} className="px-4 py-2 hover:bg-slate-100 rounded-[6px]">{p.name}</Link>
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>

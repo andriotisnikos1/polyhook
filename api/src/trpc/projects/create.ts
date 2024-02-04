@@ -2,12 +2,9 @@ import { z } from "zod";
 import { db, t } from "../../central.config.js";
 import verifySession from "../../lib/auth/verifySession.js";
 import crypto from "crypto";
+import { polyhook } from "../../types/polyhook.js";
 
-const projects = db.collection<{
-    name: string,
-    projectID: string,
-    userID: string
-}>("projects")
+const projects = db.collection<polyhook.Project>("projects")
 
 export default t.procedure
     .input(z.object({
@@ -22,7 +19,8 @@ export default t.procedure
             await projects.insertOne({
                 name: ctx.input.name,
                 projectID,
-                userID: user?.userID
+                userID: user?.userID,
+                polyhooks: 0
             })
             return {
                 projectID

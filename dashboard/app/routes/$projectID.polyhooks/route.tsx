@@ -1,38 +1,35 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { PlusIcon } from "@radix-ui/react-icons";
+import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
-import React from "react";
+import React, { useEffect } from "react";
+import cookies from "~/scripts/cookies";
+import trpc from "~/scripts/trpc";
 import dialogCSS from "~/styles/radix-ui/dialog.css";
+import { polyhook } from "~/types/project";
 
 export const links = () => [{ rel: "stylesheet", href: dialogCSS }]
 
-interface Polyhook {
-  polyhookID: string;
-  name: string;
-  actions: string[]
-  analytics: {
-    runs: number
-    successful: number
-  }
+
+export const action:ActionFunction = async({request,params}) => {
+  const projectID = params.projectID as string
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  const formData = await request.formData();
+  const name = formData.get("polyhook_name")! as string;
+  const urls = (formData.get("polyhook_urls")! as string).split("\n");
+  const created  = await trpc.polyhooks.create.query({name, urls, sessionID, projectID})
+  return {created}
 }
 
-export const action = () => {
-  console.log("action");
-  return null;
+export const loader:LoaderFunction = async ({params, request}) => {
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  const projectID = params.projectID as string
+  const polyhooks = await trpc.polyhooks.list.query({projectID, sessionID})
+  return {polyhooks: polyhooks ?? []}
 }
-
-export const loader = () => ({
-  polyhooks: [
-    {
-      polyhookID: "1",
-      name: "Hello World Polyhook",
-      actions: 20
-    }
-  ]
-})
 
 export default function Route() {
-  const loaderData = useLoaderData<{ polyhooks: Polyhook[] }>()
+  const loaderData = useLoaderData<{ polyhooks: polyhook.Polyhook[] }>()
   const polyhooks = loaderData.polyhooks ?? []
   return (
     <div className="flex flex-col w-full h-full overflow-auto space-y-8">
@@ -49,7 +46,7 @@ export default function Route() {
   );
 }
 
-function Hook({ polyhook }: { polyhook: Polyhook }) {
+function Hook({ polyhook }: { polyhook: polyhook.Polyhook }) {
   const params = useParams()
   const { projectID } = params
   if (!projectID) return null
@@ -62,13 +59,18 @@ function Hook({ polyhook }: { polyhook: Polyhook }) {
         {polyhook.name}
       </p>
       <p className="text-xs">
-        {polyhook.actions} Actions</p>
+        {polyhook.urls.length} Actions</p>
     </Link>
   );
 }
 
 function NewPolyhookDialog() {
   const closeref = React.useRef<HTMLButtonElement>(null)
+  const loaderData = useLoaderData<{ polyhooks: polyhook.Polyhook[] }>()
+  const polyhooks = loaderData.polyhooks ?? []
+  useEffect(() => {
+    closeref.current?.click()
+  }, [polyhooks.length])
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -81,12 +83,12 @@ function NewPolyhookDialog() {
             <h1 className="font-semibold text-xl">New Polyhook</h1>
             <div className="flex flex-col space-y-1 items-start justify-center">
               <span className="text-xs font-bold">Name</span>
-              <div className="border rounded-lg w-full"><input type="text" name="polyhook_name" className="px-3 py-1 text-sm w-[90%]" /></div>
+              <div className="border rounded-lg w-full"><input type="text" required name="polyhook_name" className="px-3 py-1 text-sm w-[90%]" /></div>
             </div>
             <div className="flex flex-col space-y-1 items-start justify-center w-full">
               <span className="text-xs font-bold">URLs (one under the other)</span>
               <div className="flex flex-col space-y-2 w-full">
-                <textarea name="" id="" className="outline-none p-2 text-sm border rounded-lg min-h-[400px]"></textarea>
+                <textarea name="polyhook_urls" required className="outline-none p-2 text-sm border rounded-lg min-h-[400px]"></textarea>
               </div>
             </div>
             <div className="flex items-center justify-start space-x-4">
