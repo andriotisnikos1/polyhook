@@ -1,11 +1,17 @@
 import { ActionFunction } from "@remix-run/node"
 import { Form, useOutletContext } from "@remix-run/react"
+import cookies from "~/scripts/cookies"
+import trpc from "~/scripts/trpc"
 import { polyhook } from "~/types/project"
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, params }) => {
     const formData = await request.formData()
+    const projectID = await cookies.projectID.parse(request.headers.get("Cookie"))
+    const sessionID = await cookies.session.parse(request.headers.get("Cookie"))
+    if (!projectID) return false
     const urls = (formData.get("urls") as string).split("\n").map(url => url.trim()).filter(url => url.length > 0)
-    return null
+    const res = await trpc.polyhooks.edit.query({ projectID, urls, polyhookID: params.hookID!, sessionID})
+    return res
 }
 
 export default () => {

@@ -93,10 +93,10 @@ function Sidebar() {
           />
           <p className="text-sm font-bold">Nikos Andriotis</p>
         </div>
-        <button className="p-3 px-5 border-[2px] hover:border-black rounded-lg flex items-center space-x-2">
+        <Link to={'/logout'} className="p-3 px-5 hover:bg-slate-100 rounded-lg flex items-center space-x-2">
           <ExitIcon className="text-red-400" />
           <p className="text-sm">Logout</p>
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -32,6 +32,11 @@ export default t.procedure
                 urls: ctx.input.urls.filter(url => url.length > 0)
             }
             await polyhooks.insertOne(polyhook)
+            await db.collection("projects").updateOne({ projectID: ctx.input.projectID }, {
+                $inc: {
+                    polyhooks: 1
+                }
+            })
             return true
         } catch (error) {
             console.error(error)

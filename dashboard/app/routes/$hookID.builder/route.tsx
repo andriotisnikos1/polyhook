@@ -10,6 +10,7 @@ export const loader: LoaderFunction = async ({request,params}) => {
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"))
   const sp = new URLSearchParams(request.url.split("?")[1] || "")
   let projectID = sp.get("projectID")
+  if(!sessionID) return redirect("/login")
   if (!projectID) projectID = await cookies.projectID.parse(request.headers.get("Cookie") || "")
   if (!projectID) return redirect("/projects")
   const polyhook = await trpc.polyhooks.fetch.query({projectID, sessionID, polyhookID: params.hookID!})
