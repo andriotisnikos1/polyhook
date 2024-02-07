@@ -6,7 +6,7 @@ import {
   PlusIcon,
   ReaderIcon,
 } from "@radix-ui/react-icons";
-import { Form, Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
+import { Form, Link, Outlet, useActionData, useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Dialog from "@radix-ui/react-dialog";
 import dropdownCSS from "~/styles/radix-ui/dropdown.css";
@@ -16,6 +16,7 @@ import dialogCSS from "~/styles/radix-ui/dialog.css";
 import React, { useEffect } from "react";
 import trpc from "~/scripts/trpc";
 import { polyhook } from "~/types/project";
+import { createToast } from "vercel-toast";
 
 export const links = () => [{ rel: "stylesheet", href: dropdownCSS }, { rel: "stylesheet", href: dialogCSS }];
 
@@ -28,14 +29,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 }
 
-export const action:ActionFunction = async({request}) => {
+export const action: ActionFunction = async ({ request }) => {
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
   if (!sessionID) return redirect("/login");
   const formData = await request.formData();
   const project_name = formData.get("project_name")! as string;
-  const project = await trpc.projects.create.query({name: project_name, sessionID});
+  const project = await trpc.projects.create.query({ name: project_name, sessionID });
   if (!project) return redirect("/login");
-  return redirect(`/${project.projectID}`);
+  return {
+    projectID: project.projectID
+  }
 }
 
 export default () => {
@@ -50,10 +53,12 @@ export default () => {
 };
 
 function Sidebar() {
+  const loaderData = useLoaderData<{ projects: polyhook.Project[] }>();
   const params = useParams();
   const projectID = params.projectID ?? "not found";
   useEffect(() => {
-    console.log(projectID);
+    const project = loaderData.projects.find((p) => p.projectID === projectID);
+    createToast(`Using project: ${project?.name}`, { type: "default", timeout: 3000 })
   }, [projectID]);
 
   return (
@@ -104,6 +109,18 @@ function Sidebar() {
 
 function NewProjectDialog() {
   const closeref = React.useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
+  const actionData = useActionData<{
+    projectID: string;
+  }>()
+  const pid = actionData?.projectID;
+  useEffect(() => {
+    if (pid) {
+      createToast("Project created successfully", { type: "success", timeout: 3000 });
+      navigate(`/${pid}`);
+      closeref.current?.click();
+    }
+  }, [pid]);
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -126,7 +143,7 @@ function NewProjectDialog() {
               <button onClick={() => closeref.current?.click()} className="text-sm px-3 py-1">Cancel</button>
             </div>
           </Form>
-            <Dialog.Close hidden ref={closeref} />
+          <Dialog.Close hidden ref={closeref} />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

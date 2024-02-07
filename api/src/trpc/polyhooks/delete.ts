@@ -23,6 +23,7 @@ export default t.procedure
             const project = await projects.findOne({projectID: ctx.input.projectID, userID: user.userID})
             if (!project) return false
             await polyhooks.deleteOne({polyhookID: ctx.input.polyhookID, projectID: ctx.input.projectID})
+            await projects.updateOne({projectID: ctx.input.projectID}, { $inc: { polyhookCount: -1 } })
             return true
         } catch (error) {
             console.error(error)

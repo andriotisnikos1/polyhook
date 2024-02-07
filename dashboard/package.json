@@ -25,7 +25,8 @@
     "@worldapi/sdk": "^1.0.56",
     "isbot": "^4.4.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vercel-toast": "^1.8.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.5.1",
