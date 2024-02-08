@@ -1,6 +1,6 @@
 import { GitHubLogoIcon, Link1Icon } from "@radix-ui/react-icons";
 import { LoaderFunction, redirect } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import cookies from "~/scripts/cookies";
 import worldapi from "~/scripts/worldapi";
 
@@ -11,13 +11,16 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
-  if (sessionID) return redirect("/");
-  return {
+  const links = {
     auth: {
       github: worldapi.auth().getAuthURL("github"),
     },
   };
+  const from_root = request.url.includes("from_root=true");
+  if (from_root) return links
+  const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
+  if (sessionID) return redirect("/");
+  return links
 };
 
 export default function Login() {
@@ -51,7 +54,7 @@ function LoginForm() {
           <p className="text-sm opacity-60">to your Polyhook account</p>
         </div>
         <div className="flex flex-col space-y-2">
-          <p className="font-bold text-sm">Thrid Party</p>
+          <p className="font-bold text-sm">Third Party</p>
           <div className="flex flex-col space-y-3">
             <a
               href={loaderData.auth.github}
