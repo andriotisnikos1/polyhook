@@ -16,12 +16,12 @@ export function Headbar() {
         >
           Home
         </a>
-        <a
+        {/* <a
           href="/pricing"
           className="px-3 py-1 rounded-full hover:bg-slate-100 font-semibold text-sm"
         >
           Pricing
-        </a>
+        </a> */}
       </div>
       <div className="flex items-center space-x-2">
         <Link
