@@ -1,5 +1,6 @@
 import { CheckCircledIcon } from "@radix-ui/react-icons";
-import { MetaFunction } from "@remix-run/cloudflare";
+import { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import { Headbar } from "~/components/Headbar";
 
 export const meta: MetaFunction = () => [
@@ -60,10 +61,10 @@ export default function Pricing() {
 
 function ProPlan() {
   return (
-    <div className="flex rounded-xl flex-col border-[2px] p-5 space-y-5 min-w-[250px] border-orange-400">
+    <Link to={"https://dashboard.polyhook.me/login"} className="flex rounded-xl flex-col border-[2px] p-5 space-y-5 min-w-[250px] border-orange-400">
       <p className="text-sm font-semibold text-orange-400">Pro</p>
       <div className="flex items-center space-x-2">
-        <span className="text-[30px] font-bold">$9</span>
+        <span className="text-[30px] font-bold">Free</span>
         <div className="flex flex-col">
           <span className="text-xs">per month</span>
           <span className="text-xs">billed monthly</span>
@@ -85,15 +86,15 @@ function ProPlan() {
           <Benefit label="Access to Slack Community" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 function BasicPlan() {
   return (
-    <div className="flex rounded-xl flex-col border-[2px] p-5 space-y-5 border-black min-w-[250px]">
+    <Link to={"https://dashboard.polyhook.me/login"} className="flex rounded-xl flex-col border-[2px] p-5 space-y-5 border-black min-w-[250px]">
       <p className="text-sm font-semibold">Basic</p>
       <div className="flex items-center space-x-2">
-        <span className="text-[30px] font-bold">$3</span>
+        <span className="text-[30px] font-bold">Free</span>
         <div className="flex flex-col">
           <span className="text-xs">per month</span>
           <span className="text-xs">billed monthly</span>
@@ -112,7 +113,7 @@ function BasicPlan() {
           <Benefit label="Standard Email Support" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

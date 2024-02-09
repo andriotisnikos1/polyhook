@@ -3,8 +3,8 @@ import type {
   ActionFunction,
   LoaderFunction,
   MetaFunction,
-} from "@remix-run/cloudflare";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+} from "@remix-run/node";
+import { Form, useActionData, useLoaderData, Link } from "@remix-run/react";
 import { useEffect } from "react";
 import { createToast } from "vercel-toast";
 import { Headbar } from "~/components/Headbar";
@@ -73,9 +73,7 @@ export const action: ActionFunction = async ({ request }) => {
 export const loader: LoaderFunction = async ({ request }) => {
   const urlSearchParams = new URLSearchParams(request.url.split("?")[1]);
   const fromHeadbar = urlSearchParams.get("fromHeadbar");
-  console.log(fromHeadbar);
   if (fromHeadbar === "true") return true;
-
   return false;
 };
 
@@ -194,12 +192,12 @@ export default function Index() {
   return (
     <div className="flex h-full w-full flex-col items-center">
       <Headbar />
-      <p className="my-10 rounded-full border border-black px-2 text-sm">
+      <Link to="https://www.producthunt.com/@nikos_andriotis" className="my-10 rounded-full border border-black px-2 text-sm">
         Product Hunt launch coming soon!
-      </p>
+      </Link>
       <Hero />
       <p className="mt-5">
-        Polyhook allows you to send emails(soon) and trigger multiple webhooks with
+        Polyhook allows you to send emails (soon) and trigger multiple webhooks with
         the push of a button!
       </p>
       <Waitlist />
