@@ -23,12 +23,20 @@ export function Headbar() {
           Pricing
         </a>
       </div>
-      <Link
-        to={"/?fromHeadbar=true"}
-        className="rounded-full bg-black px-3 py-1 text-sm text-white"
-      >
-        Join Waitlist
-      </Link>
+      <div className="flex items-center space-x-2">
+        <Link
+          to={"https://dashboard.polyhook.me/login"}
+          className="rounded-full px-3 py-1 text-sm"
+        >
+          Dashboard
+        </Link>
+        <Link
+          to={"/?fromHeadbar=true"}
+          className="rounded-full bg-black px-3 py-1 text-sm text-white"
+        >
+          Join Waitlist
+        </Link>
+      </div>
     </div>
   );
 }
