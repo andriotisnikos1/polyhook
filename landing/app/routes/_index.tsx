@@ -199,7 +199,7 @@ export default function Index() {
       </p>
       <Hero />
       <p className="mt-5">
-        Polyhook allows you to send emails and trigger multiple webhooks with
+        Polyhook allows you to send emails(soon) and trigger multiple webhooks with
         the push of a button!
       </p>
       <Waitlist />
