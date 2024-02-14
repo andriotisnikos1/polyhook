@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import { ActionFunction, LoaderFunction, MetaFunction, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { User } from "node_modules/@worldapi/sdk/types/User";
 import cookies from "~/scripts/cookies";
@@ -16,22 +16,29 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!sessionID) return redirect("/login");
   const user = await cookies.user.parse(request.headers.get("Cookie"))
   if (!user) return redirect("/login")
-  const projects = await trpc.projects.list.query({sessionID})
-  return{
+  const projects = await trpc.projects.list.query({ sessionID })
+  return {
     user: JSON.parse(user),
     projects: projects ?? []
   }
 }
 
-export const action:ActionFunction = async({request}) => {
+export const action: ActionFunction = async ({ request }) => {
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
   if (!sessionID) return redirect("/login");
   const formData = await request.formData();
   const project_name = formData.get("project_name")! as string;
-  const project = await trpc.projects.create.query({name: project_name, sessionID});
+  const project = await trpc.projects.create.query({ name: project_name, sessionID });
   if (!project) return redirect("/login");
   return redirect(`/${project.projectID}`);
 }
+
+export const meta: MetaFunction = ({ }) => [
+  {
+    name: "My Projects - Polyhook",
+  }
+]
+
 
 export default () => {
   const loaderData = useLoaderData<{ user: User, projects: polyhook.Project[] }>();
@@ -50,7 +57,7 @@ export default () => {
           </Link>
         ))}
         <NewProjectDialog />
-        </div>
+      </div>
     </div>
   );
 };
@@ -79,7 +86,7 @@ function NewProjectDialog() {
               <button onClick={() => closeref.current?.click()} className="text-sm px-3 py-1">Cancel</button>
             </div>
           </Form>
-            <Dialog.Close hidden ref={closeref} />
+          <Dialog.Close hidden ref={closeref} />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
@@ -90,8 +97,8 @@ function NewProjectDialog() {
 function Project({ project }: { project: polyhook.Project }) {
   return (
     <div className="flex items-center justify-between p-5 bg-slate-50 hover:bg-slate-100 rounded-md">
-          <p className="font-semibold text-lg">{project.name}</p>
-          <p>{project.polyhooks} polyhooks</p>
-        </div>
+      <p className="font-semibold text-lg">{project.name}</p>
+      <p>{project.polyhooks} polyhooks</p>
+    </div>
   )
 }

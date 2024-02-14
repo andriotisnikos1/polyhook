@@ -11,21 +11,27 @@ import { polyhook } from "~/types/project";
 export const links = () => [{ rel: "stylesheet", href: dialogCSS }]
 
 
-export const action:ActionFunction = async({request,params}) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const projectID = params.projectID as string
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
   const formData = await request.formData();
   const name = formData.get("polyhook_name")! as string;
   const urls = (formData.get("polyhook_urls")! as string).split("\n");
-  const created  = await trpc.polyhooks.create.query({name, urls, sessionID, projectID})
-  return {created}
+  const created = await trpc.polyhooks.create.query({ name, urls, sessionID, projectID })
+  return { created }
 }
 
-export const loader:LoaderFunction = async ({params, request}) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
   const sessionID = await cookies.session.parse(request.headers.get("Cookie"));
   const projectID = params.projectID as string
-  const polyhooks = await trpc.polyhooks.list.query({projectID, sessionID})
-  return {polyhooks: polyhooks ?? []}
+  const polyhooks = await trpc.polyhooks.list.query({ projectID, sessionID })
+  return { polyhooks: polyhooks ?? [] }
+}
+
+export const meta = () => {
+  return {
+    title: "Polyhooks"
+  }
 }
 
 export default function Route() {
@@ -93,11 +99,11 @@ function NewPolyhookDialog() {
             </div>
             <div className="flex items-center justify-start space-x-4">
               <button type="submit" className="text-white bg-black px-3 py-1 rounded-md">Create</button>
-              
-                <button className="px-3 py-1 rounded-md" onClick={() => {
-                  closeref.current?.click()
-                }}>Cancel</button>
-                <Dialog.Close ref={closeref}/>
+
+              <button className="px-3 py-1 rounded-md" onClick={() => {
+                closeref.current?.click()
+              }}>Cancel</button>
+              <Dialog.Close ref={closeref} />
             </div>
           </Form>
         </Dialog.Content>

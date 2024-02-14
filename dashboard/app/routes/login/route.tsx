@@ -23,6 +23,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   return links
 };
 
+export const meta = () => {
+  return {
+    title: "Login - Polyhook",
+  };
+}
+
 export default function Login() {
   return (
     <div className="h-full w-full flex items-center">

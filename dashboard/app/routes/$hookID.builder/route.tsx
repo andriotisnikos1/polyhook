@@ -5,7 +5,7 @@ import {
   ClipboardIcon,
   Link1Icon,
 } from "@radix-ui/react-icons";
-import { LoaderFunction, json, redirect } from "@remix-run/node";
+import { LoaderFunction, MetaFunction, json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import cookies from "~/scripts/cookies";
 import trpc from "~/scripts/trpc";
@@ -32,6 +32,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     { headers: { "Set-Cookie": await cookies.projectID.serialize(projectID) } },
   );
 };
+
+export const meta: MetaFunction = ({ }) => [
+  {
+    name: "Hook Builder - Polyhook",
+  }
+]
 
 export default function Route() {
   const loaderData = useLoaderData<{

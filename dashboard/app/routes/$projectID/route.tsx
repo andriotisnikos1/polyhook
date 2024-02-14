@@ -1,6 +1,7 @@
 import {
   ChevronRightIcon,
   ExitIcon,
+  GearIcon,
   Link1Icon,
   Link2Icon,
   PlusIcon,
@@ -38,6 +39,12 @@ export const action: ActionFunction = async ({ request }) => {
   if (!project) return redirect("/login");
   return {
     projectID: project.projectID
+  }
+}
+
+export const meta = () => {
+  return {
+    title: "Project View - Polyhook"
   }
 }
 
@@ -81,11 +88,11 @@ function Sidebar() {
             <p>Polyhooks</p>
           </Link>
           <Link
-            to={`/${projectID}/billing`}
+            to={`/${projectID}`}
             className="flex items-center px-3 py-2 text-sm hover:bg-slate-100 space-x-2 rounded-lg"
           >
-            <ReaderIcon className="text-gray-400" />
-            <p>Billing</p>
+            <GearIcon className="text-gray-400" />
+            <p>Settings (Soon)</p>
           </Link>
         </div>
       </div>
