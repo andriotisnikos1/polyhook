@@ -1,11 +1,13 @@
-from oven/bun:latest
+from node:current-alpine
 
-WORKDIR /app
+workdir /app
 
-COPY package.json .
+copy package.json /app
 
-run bun i
+run npm install
 
-COPY . .
+copy . /app
 
-CMD bun run start
+run npm run build
+
+cmd npm start
