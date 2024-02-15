@@ -184,7 +184,7 @@ export default function Index() {
   return (
     <div className="flex h-full w-full flex-col items-center">
       <Headbar />
-      <Link to="https://www.producthunt.com/@nikos_andriotis" className="my-10 rounded-full border border-black px-2 text-sm">
+      <Link to="https://www.producthunt.com/products/polyhook" className="my-10 rounded-full border border-black px-2 text-sm">
         Product Hunt launch coming soon!
       </Link>
       <Hero />
