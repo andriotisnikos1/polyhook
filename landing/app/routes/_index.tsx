@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import type {
   ActionFunction,
   LoaderFunction,
@@ -184,8 +185,8 @@ export default function Index() {
   return (
     <div className="flex h-full w-full flex-col items-center">
       <Headbar />
-      <Link to="https://www.producthunt.com/products/polyhook" className="my-10 rounded-full border border-black px-2 text-sm">
-        Product Hunt launch coming soon!
+      <Link to="https://www.producthunt.com/products/polyhook" className="my-10 flex items-center space-x-2 rounded-full border border-black px-2 text-sm">
+        <p>Follow the upcoming launch on Product Hunt</p> <ExternalLinkIcon />
       </Link>
       <Hero />
       <p className="mt-5">
