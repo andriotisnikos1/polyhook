@@ -1,10 +1,9 @@
-import { Link1Icon } from "@radix-ui/react-icons";
 import type {
   ActionFunction,
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { Form, useActionData, useLoaderData, Link } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { createToast } from "vercel-toast";
 import { Headbar } from "~/components/Headbar";
@@ -68,13 +67,6 @@ export const action: ActionFunction = async ({ request }) => {
     }),
   });
   return true;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const urlSearchParams = new URLSearchParams(request.url.split("?")[1]);
-  const fromHeadbar = urlSearchParams.get("fromHeadbar");
-  if (fromHeadbar === "true") return true;
-  return false;
 };
 
 function Hero() {

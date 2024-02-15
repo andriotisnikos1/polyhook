@@ -31,7 +31,7 @@ export function Headbar() {
           Dashboard
         </Link>
         <Link
-          to={"/?fromHeadbar=true"}
+          to={"/"}
           className="rounded-full bg-black px-3 py-1 text-sm text-white"
         >
           Join Waitlist
